@@ -1,3 +1,5 @@
+using MediatR;
+using System.Reflection;
 using ECommerce.Domain.Extensions;
 using ECommerce.Service.Extensions;
 
@@ -12,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureDomain();
 builder.Services.ConfigureServices();
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 

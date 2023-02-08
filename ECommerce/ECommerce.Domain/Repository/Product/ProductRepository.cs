@@ -4,11 +4,16 @@ namespace ECommerce.Domain.Repository
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly IApiContext _context;
+
+        public ProductRepository(IApiContext context)
+        {
+            _context = context;
+        }
+
         public Product GetProduct(int productId)
         {
-            using var context = new ApiContext();
-
-            var product = context.Products
+            var product = _context.Products
                 .SingleOrDefault(x => x.Id == productId);
 
             if (product == null)

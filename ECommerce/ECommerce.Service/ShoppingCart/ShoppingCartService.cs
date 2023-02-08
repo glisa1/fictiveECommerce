@@ -1,24 +1,34 @@
 ﻿using ECommerce.Domain.Repository;
 using ECommerce.Service.Models;
+using ECommerce.Service.Models.Commands;
 using ECommerce.Service.Models.Mappers;
+using ECommerce.Service.Models.Queries;
+using MediatR;
 
 namespace ECommerce.Service.ShoppingCart
 {
-    public class ShoppingCartService : IShoppingCartService
+    public class ShoppingCartService :
+        IRequestHandler<ShoppingCartContentQuery, ShoppingCartDto>,
+        IRequestHandler<AddProductToCartCommand, int>,
+        IRequestHandler<CreateOrderCommand, int>
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly IProductRepository _productRepository;
 
-        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository)
+        public ShoppingCartService(
+            IShoppingCartRepository shoppingCartRepository,
+            IProductRepository productRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
+            _productRepository = productRepository;
         }
 
-        public ShoppingCartDto GetCartContent(int userId)
+        public async Task<ShoppingCartDto> Handle(ShoppingCartContentQuery request, CancellationToken cancellationToken)
         {
             try
             {
                 return _shoppingCartRepository
-                        .GetShoppingCart(userId)
+                        .GetShoppingCart(request.CustomerId)
                         .MapToDto();
             }
             catch
@@ -27,11 +37,13 @@ namespace ECommerce.Service.ShoppingCart
             }
         }
 
-        public void InsertProductToCart(int customerId, int productId, int quantity)
+        public async Task<int> Handle(AddProductToCartCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                throw new NotImplementedException();
+                var product = _productRepository.GetProduct(request.ProductId);
+                await _shoppingCartRepository.AddToCart(request.CustomerId, product, request.Quantity);
+                return 1;
             }
             catch
             {
@@ -39,16 +51,9 @@ namespace ECommerce.Service.ShoppingCart
             }
         }
 
-        public void CreateOrder(int customerId, string address, string phoneNumber)
+        public Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
     }
 }

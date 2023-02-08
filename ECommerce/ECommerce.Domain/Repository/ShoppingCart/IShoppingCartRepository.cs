@@ -6,6 +6,6 @@ namespace ECommerce.Domain.Repository
     {
         List<Product> GetShoppingCart(int userId);
         void EmptyShoppingCart(int userId);
-        void AddToCart(int userId, Product product, int quantity);
+        Task AddToCart(int userId, Product product, int quantity);
     }
 }

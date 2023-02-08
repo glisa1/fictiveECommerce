@@ -1,4 +1,5 @@
-﻿using ECommerce.Service.ShoppingCart;
+﻿using MediatR;
+using System.Reflection;
 using ECommerce.Service.SupplierStock;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,8 +9,8 @@ namespace ECommerce.Service.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddTransient<ISupplierStockService, SupplierStockService>();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
     }
 }

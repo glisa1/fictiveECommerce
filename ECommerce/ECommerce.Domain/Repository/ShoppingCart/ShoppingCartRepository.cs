@@ -4,11 +4,16 @@ namespace ECommerce.Domain.Repository
 {
     public class ShoppingCartRepository : IShoppingCartRepository
     {
+        private readonly IApiContext _context;
+
+        public ShoppingCartRepository(IApiContext context)
+        {
+            _context = context;
+        }
+
         public List<Product> GetShoppingCart(int userId)
         {
-            using var context = new ApiContext();
-
-            var user = context.Customers
+            var user = _context.Customers
                 .SingleOrDefault(x => x.Id == userId);
 
             if (user == null)
@@ -17,33 +22,31 @@ namespace ECommerce.Domain.Repository
             return user.Cart;
         }
 
-        public void EmptyShoppingCart(int userId)
+        public async void EmptyShoppingCart(int userId)
         {
-            using var context = new ApiContext();
-
-            var user = context.Customers
+            var user = _context.Customers
                 .SingleOrDefault(x => x.Id == userId);
 
             if (user == null) 
                 throw new Exception("Entity was not found.");
 
             user.Cart.Clear();
-            context.SaveChanges();
-
+            await _context.SaveChangesAsync();
         }
 
-        public void AddToCart(int userId, Product product, int quantity)
+        public async Task AddToCart(int userId, Product product, int quantity)
         {
-            using var context = new ApiContext();
-
-            var user = context.Customers
+            var user = _context.Customers
                 .SingleOrDefault(x => x.Id == 1);
 
             if (user == null)
                 throw new Exception("Entity was not found.");
 
+            if (user.Cart == null)
+                user.Cart = new List<Product>();
+
             user.Cart.Add(product);
-            context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

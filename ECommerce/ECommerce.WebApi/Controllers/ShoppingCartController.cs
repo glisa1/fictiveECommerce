@@ -1,6 +1,8 @@
-﻿using ECommerce.Service.ShoppingCart;
+﻿using MediatR;
 using ECommerce.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using ECommerce.Service.Models.Queries;
+using ECommerce.Service.Models.Commands;
 
 namespace ECommerce.WebApi.Controllers
 {
@@ -8,20 +10,20 @@ namespace ECommerce.WebApi.Controllers
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
-        private readonly IShoppingCartService _shoppingCartService;
+        private readonly IMediator _mediator;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService)
+        public ShoppingCartController(IMediator mediator)
         {
-            _shoppingCartService = shoppingCartService;
+            _mediator = mediator;
         }
 
         [HttpGet(Name = "GetShoppingCartContents")]
-        public IActionResult GetShoppingCartContents(int userId)
+        public async Task<IActionResult> GetShoppingCartContents(int customerId)
         {
             try
             {
-                var result = _shoppingCartService.GetCartContent(userId);
-                return Ok();
+                var result = await _mediator.Send(new ShoppingCartContentQuery { CustomerId = customerId });
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -30,10 +32,11 @@ namespace ECommerce.WebApi.Controllers
         }
 
         [HttpPost(Name = "AddProductToCart")]
-        public IActionResult AddProductToCart([FromBody] AddProductToCartModel model)
+        public async Task<IActionResult> AddProductToCart([FromBody] AddProductToCartCommand command)
         {
             try
             {
+                await _mediator.Send(command);
                 return Ok();
             }
             catch (Exception ex)
@@ -42,17 +45,17 @@ namespace ECommerce.WebApi.Controllers
             }
         }
 
-        [HttpPost(Name = "CreateOrder")]
-        public IActionResult CreateOrder([FromBody] CreateOrderModel model)
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpPost(Name = "CreateOrder")]
+        //public IActionResult CreateOrder([FromBody] CreateOrderModel model)
+        //{
+        //    try
+        //    {
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

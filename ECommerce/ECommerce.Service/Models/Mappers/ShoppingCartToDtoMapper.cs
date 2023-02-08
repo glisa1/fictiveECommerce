@@ -4,21 +4,21 @@ namespace ECommerce.Service.Models.Mappers
 {
     public static class ShoppingCartToDtoMapper
     {
-        public static ShoppingCartDto MapToDto(this List<Product> products)
+        public static ShoppingCartDto MapToDto(this List<CartItem> cartItems)
         {
             var productsDto = new ShoppingCartDto();
 
-            if (products == null)
+            if (cartItems == null)
                 return productsDto;
 
-            foreach (var product in products)
+            foreach (var cartItem in cartItems)
             {
                 productsDto.Products.Add(new ProductDto
                 {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Price = product.Price,
-                    Quantity = product.Quantity,
+                    Id = cartItem.Id,
+                    Name = cartItem.Product.Name,
+                    Price = cartItem.Product.Price,
+                    Quantity = cartItem.QuantityInCart,
                 });
             }
             

@@ -2,7 +2,7 @@
 
 namespace ECommerce.Service.Models.Commands
 {
-    public class CreateOrderCommand : IRequest<int>
+    public class CreateOrderCommand : IRequest<OrderDto>
     {
         public int CustomerId { get; set; }
         public string Address { get; set; }

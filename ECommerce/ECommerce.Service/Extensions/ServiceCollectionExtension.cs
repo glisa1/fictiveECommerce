@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using FluentValidation;
 using System.Reflection;
-using ECommerce.Service.SupplierStock;
 using Microsoft.Extensions.DependencyInjection;
+using ECommerce.Service.Services.PriceCalculation;
+using FluentValidation.AspNetCore;
 
 namespace ECommerce.Service.Extensions
 {
@@ -9,8 +11,10 @@ namespace ECommerce.Service.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddTransient<ISupplierStockService, SupplierStockService>();
+            services.AddTransient<IPriceCalculationService, PriceCalculationService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddFluentValidationAutoValidation()
+                .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

@@ -4,7 +4,9 @@ namespace ECommerce.Domain.Models.Domain
 {
     public class Order : Entity
     {
-        public List<Product> Products { get; set; }
         public Customer Customer { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal AppliedDiscount { get; set; }
+        public string Address { get; set; }
     }
 }

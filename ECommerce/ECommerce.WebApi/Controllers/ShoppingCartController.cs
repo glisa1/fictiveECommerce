@@ -1,12 +1,11 @@
 ﻿using MediatR;
-using ECommerce.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using ECommerce.Service.Models.Queries;
 using ECommerce.Service.Models.Commands;
 
 namespace ECommerce.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
@@ -45,17 +44,18 @@ namespace ECommerce.WebApi.Controllers
             }
         }
 
-        //[HttpPost(Name = "CreateOrder")]
-        //public IActionResult CreateOrder([FromBody] CreateOrderModel model)
-        //{
-        //    try
-        //    {
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        [HttpPost(Name = "CreateOrder")]
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand model)
+        {
+            try
+            {
+                var result = await _mediator.Send(model);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

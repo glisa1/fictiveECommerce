@@ -10,6 +10,8 @@ namespace ECommerce.Domain.Extensions
         {
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IApiContext, ApiContext>();
         }
     }

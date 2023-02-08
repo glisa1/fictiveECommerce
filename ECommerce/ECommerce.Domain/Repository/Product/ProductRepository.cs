@@ -18,10 +18,22 @@ namespace ECommerce.Domain.Repository
 
             if (product == null)
             {
-                throw new Exception("Entity not found.");
+                throw new Exception("Product was not found.");
             }
 
             return product;
+        }
+
+        public async Task AdjustProductQuantity(int productId, int quantityTaken)
+        {
+            var product = GetProduct(productId);
+
+            product.Quantity -= quantityTaken;
+
+            if (product.Quantity < 0)
+                product.Quantity = 0;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

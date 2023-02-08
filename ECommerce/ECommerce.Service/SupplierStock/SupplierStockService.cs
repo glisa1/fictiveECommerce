@@ -1,12 +1,15 @@
-﻿namespace ECommerce.Service.SupplierStock
+﻿using ECommerce.Service.Models.Queries;
+using MediatR;
+
+namespace ECommerce.Service.SupplierStock
 {
-    public class SupplierStockService : ISupplierStockService
+    public class SupplierStockService : IRequestHandler<SupplierStockQuery, int>
     {
-        public int GetQuantityFromSupplierStock(int productId)
+        public async Task<int> Handle(SupplierStockQuery request, CancellationToken cancellationToken)
         {
             Random random = new Random();
 
-            return productId * random.Next(0, 3);
+            return request.ProductId * random.Next(0, 3);
         }
     }
 }

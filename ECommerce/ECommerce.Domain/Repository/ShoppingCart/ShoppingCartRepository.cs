@@ -11,42 +11,36 @@ namespace ECommerce.Domain.Repository
             _context = context;
         }
 
-        public List<Product> GetShoppingCart(int userId)
+        public List<CartItem> GetShoppingCart(Customer customer)
         {
-            var user = _context.Customers
-                .SingleOrDefault(x => x.Id == userId);
-
-            if (user == null)
-                throw new Exception("Entity was not found.");
-
-            return user.Cart;
+            return customer.Cart;
         }
 
-        public async void EmptyShoppingCart(int userId)
+        public async Task EmptyShoppingCart(Customer customer)
         {
-            var user = _context.Customers
-                .SingleOrDefault(x => x.Id == userId);
-
-            if (user == null) 
-                throw new Exception("Entity was not found.");
-
-            user.Cart.Clear();
+            customer.Cart.Clear();
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddToCart(int userId, Product product, int quantity)
+        public async Task AddToCart(Customer customer, Product product, int quantity)
         {
-            var user = _context.Customers
-                .SingleOrDefault(x => x.Id == 1);
+            if (customer.Cart == null)
+                customer.Cart = new List<CartItem>();
 
-            if (user == null)
-                throw new Exception("Entity was not found.");
+            var itemInCart = customer.Cart.Where(x => x.Product.Id == product.Id).FirstOrDefault();
 
-            if (user.Cart == null)
-                user.Cart = new List<Product>();
-
-            user.Cart.Add(product);
-            await _context.SaveChangesAsync();
+            if (itemInCart == null)
+            {
+                customer.Cart.Add(new CartItem
+                {
+                    Product = product,
+                    QuantityInCart = quantity
+                });
+            }
+            else
+            {
+                itemInCart.QuantityInCart += quantity;
+            }
         }
     }
 }

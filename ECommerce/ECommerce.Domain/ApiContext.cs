@@ -34,14 +34,14 @@ namespace ECommerce.Domain
                     Id = 1,
                     FullName = "Full Test Name",
                     Username = "fullTestName",
-                    Cart = new List<Product>()
+                    Cart = new List<CartItem>()
                 },
                 new Customer
                 {
                     Id = 2,
                     FullName = "Test Full Name",
                     Username = "testFullName",
-                    Cart = new List<Product>()
+                    Cart = new List<CartItem>()
                 }
             };
 

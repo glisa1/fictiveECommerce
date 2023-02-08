@@ -4,8 +4,8 @@ namespace ECommerce.Domain.Repository
 {
     public interface IShoppingCartRepository
     {
-        List<Product> GetShoppingCart(int userId);
-        void EmptyShoppingCart(int userId);
-        Task AddToCart(int userId, Product product, int quantity);
+        List<CartItem> GetShoppingCart(Customer customer);
+        Task EmptyShoppingCart(Customer customer);
+        Task AddToCart(Customer customer, Product product, int quantity);
     }
 }
